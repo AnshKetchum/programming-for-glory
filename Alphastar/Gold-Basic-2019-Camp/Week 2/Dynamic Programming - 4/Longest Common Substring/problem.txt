@@ -1,0 +1,32 @@
+Longest Common Substring
+========================
+
+Given two strings s1 and s2 (0 < |s1|,|s2| <= 1000) find the size of 
+their longest common substring. Strings can only be composed of 
+lowercase and uppercase letters. A substring is contiguous. 
+
+PROBLEM NAME: lcs
+
+INPUT FORMAT:
+
+* Line 1: s1
+
+* Line 2: s2
+
+SAMPLE INPUT:
+
+ACBAABAACC
+CABABAADACCC
+
+OUTPUT FORMAT:
+
+* Line 1: Single integer that is the size of the longest common
+          substring
+
+SAMPLE OUTPUT:
+
+4
+
+OUTPUT DETAILS:
+
+The longest common substring is 'ABAA'.
