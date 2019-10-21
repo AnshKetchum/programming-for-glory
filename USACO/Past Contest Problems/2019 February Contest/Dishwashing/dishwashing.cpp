@@ -1,29 +1,49 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define MAXN 150000
+#define MAXN 350000
 
 
-int n,stacks = -1,leftP;
-vector <int> elsie_stack,bessie_stack[MAXN];
+int n,ans = 0,s[MAXN],elsie_top;
+vector <int> stacks [MAXN];
+set <int> bases;
 
-int get_index(int l, int r, int key)
-{   
-    cout << "(" << l << "," << r << ")" << endl;
-    if(l == r)
-        return l;
+void delete_bases(int base, int val)
+{
+    while(*bases.begin() != base) //Delete everything up to the current base
+        bases.erase(bases.begin());
+}
 
-    if(r - l == 1)
+void delete_plates(int base, int val)
+{
+    while(stacks[base][stacks[base].size() - 1] < val && stacks[base][stacks[base].size() - 1] != 0)
     {
-        if(bessie_stack[l][0] > key)
-            return l;
-        return r;
+        elsie_top = stacks[base][stacks[base].size() - 1];
+        stacks[base].pop_back();
     }
+}
 
-    int mid = (l + r) / 2;
+void insert_into_stack(int val)
+{
     
-    if(bessie_stack[mid][0] < key)
-        return get_index(l, mid,key);
-    return get_index(mid,r,key);
+    if(bases.size() == 0 || val > *(--bases.end()))
+    {
+        bases.insert(val);
+        stacks[val].push_back(0);
+    }
+    else
+    {
+        int next_larger_base = *(bases.upper_bound(val));
+
+        int s = stacks[next_larger_base].size() - 1;
+        if(stacks[next_larger_base][s] < val)
+        {
+            delete_bases(next_larger_base,val);
+            delete_plates(next_larger_base,val);
+            stacks[next_larger_base].push_back(val);
+        }
+        
+    }
+    
 }
 
 int main()
@@ -31,75 +51,20 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(0);
     ifstream cin("dishes.in");
-//    ofstream cout("dishes.out");
+    ofstream cout("dishes.out");
 
     cin >> n;
-    for(int i = 1; i <= n; i++)
+    for(int i = 0; i < n; i++)
+        cin >> s[i];
+    
+    for(int i = 0; i < n; i++)
     {
-        int d; cin >> d;
-        cout << "\n\n";
-
-        if(stacks == -1 || d > bessie_stack[stacks][0]) //Creating a new stack 
-        {
-            bessie_stack[++stacks].push_back(d);
-            cout << "Created new Stack. Current Size: " << stacks << endl;
-
-            continue;
-        }
-
-        cout << "Value: " << d << " doens't need a new stack " << endl;
-        int appropriate_stack = get_index(leftP,stacks,d); //Finds the lowest base > d
-//        cout << "BINARY SEARCH RETURNS STACK # " << appropriate_stack << " for value " << d << endl;
-
-        cout << "Checking if back: " << bessie_stack[appropriate_stack].back() <<  " is greater than " << d << endl;
-        if(bessie_stack[appropriate_stack].back() > d) // Top > d ? Add it to the stack
-        {
-            cout << "New Top for Stack " << appropriate_stack << " - " << d << endl;
-            bessie_stack[appropriate_stack].push_back(d);
-        }
-        else
-        {
-            cout << "\n";
-            while(bessie_stack[appropriate_stack].back() < d && !bessie_stack[appropriate_stack].empty())
-            {
-               cout << "Removing Top: " << bessie_stack[appropriate_stack].back() << " to insert: " << d << endl;
-                elsie_stack.push_back(bessie_stack[appropriate_stack].back());
-                bessie_stack[appropriate_stack].pop_back();
-            }
-            if(!bessie_stack[appropriate_stack].empty())
-                bessie_stack[appropriate_stack].push_back(d);
-            else 
-            {
-                leftP++;
-                elsie_stack.push_back(d);
-            }
-        }
-
-    }
-
-    cout << "\n\n\n";
-    for(int i = 0; i <= stacks; i++)
-        while(!bessie_stack[i].empty())
-        {
-            cout << "Finally inserting: " << bessie_stack[i].back() << endl;
-
-            elsie_stack.push_back(bessie_stack[i].back());
-            bessie_stack[i].pop_back();
-        }    
-    for(int x : elsie_stack)
-        cout << x << " ";
-    cout << endl;
-
-    int ans = 1;
-    for(int i = 1; i < elsie_stack.size(); i++)
-    {
-        if(elsie_stack[i] < elsie_stack[i - 1])
-        {
-            cout << elsie_stack[i] << " isn't greater than " << elsie_stack[i - 1] << endl;
+        if(s[i] < elsie_top)
             break;
-        }
+        insert_into_stack(s[i]);
         ans++;
     }
-    cout << ans << endl;
+
+    cout << (ans == 0 ? 1 : ans) << endl;
     return 0;
 }
