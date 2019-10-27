@@ -6,24 +6,20 @@ using namespace std;
 int n,d,chocolate[MAXN];
 bool pos(int happiness_value)
 {
-    int group_count = 1,sum = 0;
-
+    int day_count = 1,sum = 0;
     for(int i = 0; i < n; i++)
     {
-        if(sum + chocolate[i] <= happiness_value)
+        if(sum < happiness_value)
             sum += chocolate[i];
-        else if(chocolate[i] > happiness_value)
-            return false;
-        else
+
+        while(sum >= happiness_value)
         {
             sum /= 2;
-            sum += chocolate[i];
-            group_count++;
+            day_count++;
         }
-        
     }
 
-    return group_count <= d;
+    return day_count - 1 <= d;
 }
 
 int binary_search(int l, int r)
@@ -33,7 +29,8 @@ int binary_search(int l, int r)
     int mid = (l + r) / 2;
 
     if(pos(mid))
-        return binary_search(l,mid);
+        return binary_search(l, mid);
+
     return binary_search(mid + 1, r);
 }
 
