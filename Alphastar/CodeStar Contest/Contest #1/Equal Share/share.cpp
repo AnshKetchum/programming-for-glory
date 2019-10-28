@@ -2,7 +2,9 @@
 using namespace std;
 #define MAXN 150000
 
-int n,k,gems[MAXN],ans = 1;
+typedef long long ll;
+const ll MOD = 1000007;
+ll n,k,gems[MAXN],ans = 1;
 int main()
 {
     ios_base::sync_with_stdio(false);
@@ -13,10 +15,12 @@ int main()
         cin >> gems[i];
     sort(gems, gems + n);
         
-    int divider = n / k;
-    for(int i = 0; i < n - 1; i += divider)
-        ans *= (gems[i + 1] - gems[i] - 1);
-        
+    ll divider = n / k;
+    for(int i = divider; i < n; i += divider)
+    {
+        ans *=  (gems[i] - gems[i - 1] - 1);
+        ans %= MOD;
+    }
     cout << ans << endl;
     return 0;
-} 
+}
