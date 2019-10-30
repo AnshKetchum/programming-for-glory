@@ -33,15 +33,10 @@ void dijkstra(int source, int ind, ll (&cost) [MAXK][MAXN], vector <pll> connect
             {
                 ll c = cost[ind][top.second] + x.first;
                 cost[ind][x.second] = min(cost[ind][x.second],c);
-                //cout << cost[ind][x.second] << " " << c << endl;
                 best_edges.push(pll(-c,x.second));
             }
 
     }
-
-    /*for(int i = 1; i <= n; i++)
-        cout << cost[ind][i] << " ";
-    cout << endl; */
 
 }
 
@@ -74,11 +69,8 @@ int main()
         ll f,t,ret = INF; cin >> f >> t;
         
         for(int j = 0; j < k; j++)
-        {
-            //cout << cost[j][f] + cost[j][t] << " " << cost[j][f] << "  " << cost[j][t] << endl;
             ret = min(ret, cost_from[j][f] + cost_to[j][t]);
-        }
-//        cout << "Best Route from " << f << " to " << t << " : " << ret << endl;
+
         sum += (ret == INF ? 0 : ret);
         cnt += (ret == INF ? 0 : 1);
     } 
