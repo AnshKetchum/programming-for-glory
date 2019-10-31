@@ -27,18 +27,18 @@ int main()
         fill(dp[i],dp[i] + MAXM - 1, INF);
 
     dp[0][0] = 0; //Base Case
-    for(int i = 0; i < n; i++) //Compute DP
+    for(int i = 1; i <= n; i++) //Compute DP
     {
         dp[i][0] = count_pal(0,i + 1);
-        for(int k = 1; k < m; k++)
+        for(int k = 1; k <= m; k++)
             for(int j = i; j >= 0; j--)
                 dp[i][k] = min(dp[i][k], dp[j][k - 1] + count_pal(j,i));
     } 
 
-    if(dp[n - 1][m - 1] > x)
+    if(dp[n][m] > x)
         cout << "NO" << endl;
     else
-        cout << "YES\n" << dp[n - 1][m - 1] << endl;  
+        cout << "YES\n" << dp[n][m] << endl;  
     
     
     return 0;
