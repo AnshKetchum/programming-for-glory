@@ -4,7 +4,6 @@ using namespace std;
  
  
 int dp_a[MAX_FRUIT],dp_b[MAX_FRUIT],p,a,b,q_a,q_b,options_a[MAX_FRUIT],options_b[MAX_FRUIT],ans;
- 
 void compute_dp(int dp [MAX_FRUIT], int options [MAX_FRUIT], int cost, int x)
 {
     for(int i = 0; i < x; i++)
@@ -26,7 +25,6 @@ int main()
     
     compute_dp(dp_a,options_a,a,q_a);
     compute_dp(dp_b,options_b,b,q_b);
-    
     
     for(int i = 0; i <= p; i++)
         ans = max(ans,(dp_a[i] + dp_b[p - i]));
