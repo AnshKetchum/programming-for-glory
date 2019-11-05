@@ -1,8 +1,4 @@
-/*****
-ID: ansh1221
-LANG: C++
-PROG: kimbits
-**/
+
 #include <bits/stdc++.h>
 using namespace std;
 #define MAXL 35
