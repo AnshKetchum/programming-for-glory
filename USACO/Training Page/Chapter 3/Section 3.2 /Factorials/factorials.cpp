@@ -1,8 +1,4 @@
-/*****
-ID: ansh1221
-LANG: C++
-PROG: fact4
-**/
+
 #include <bits/stdc++.h>
 using namespace std;
 #define MAXN 10000
