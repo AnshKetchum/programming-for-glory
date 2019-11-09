@@ -5,44 +5,33 @@ PROG: kimbits
 **/
 #include <bits/stdc++.h>
 using namespace std;
-#define MAXL 35
+#define MAXL 50
+#define MAX_BITS 32
 
-int n,l,q;
-vector <string> dp [MAXL][MAXL];
+typedef long long ll;
+ll n,l,q,dp[MAXL][MAXL],ind,ones;
 int main()
 {
     ifstream cin("kimbits.in");
-     ofstream cout("kimbits.out");
+    ofstream cout("kimbits.out");
     cin >> n >> l >> q;
+    ll temp = q - 1;
+    q--;
 
-    for(int i = 0; i < MAXL; i++)
+    for(int i = 0; i <= MAX_BITS; i++)
+        dp[0][i] = 1;
+    for(int i = 1; i <= MAX_BITS; i++)
+        for(int j = 0; j <= MAX_BITS; j++)
+            dp[i][j] = (j ? dp[i - 1][j] + dp[i - 1][j - 1] : 1);
+    
+    ones = l;
+    for(int i = n; i > 0; i--)
     {
-        dp[i][0].push_back("");
-        dp[0][i].push_back("");
-    }
-
-    for(int i = 1; i <= n; i++)
-    {
-        for(int k = 1; k <= i; k++)
-        {
-            cout << i << " " << k << endl;
-            for(string s : dp[i - 1][k])
-            {
-                cout << "Adding " << s + '0' << endl;
-                dp[i][k].push_back(s + '0');
-            }
-
-            cout << "Switch States" << endl;
-            for(string s : dp[i - 1][k - 1])
-            {
-                cout << "Adding " << s + '1' << endl;
-                dp[i][k].push_back(s + '1');
-            }
-        }
-    }
-
-
-    int s = dp[n][l].size() -1;
-   cout << dp[n][l][s] << endl;
+        ind = dp[i - 1][ones];
+        cout << (ind <= q ? "1" : "0");
+        ones = (ind <= q ? ones - 1 : ones);
+        q = (ind <= q ? q - ind : q);
+    } 
+    cout << endl;
    return 0;
 }
