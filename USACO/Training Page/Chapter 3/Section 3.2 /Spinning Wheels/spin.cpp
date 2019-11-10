@@ -1,5 +1,5 @@
 /*****
-ID: ansh1221
+ID: INSERT_NAME_HERE
 LANG: C++
 PROG: spin
 **/
