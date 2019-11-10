@@ -1,0 +1,44 @@
+Building Roads
+==============
+
+Farmer John had just acquired several new farms! He wants to connect 
+the farms with roads so that he can travel from any farm to any other 
+farm via a sequence of roads; roads already connect some of the farms.
+
+Each of the N (1 <= N <= 1,000) farms (conveniently numbered 1..N) 
+is represented by a position (Xi, Yi) on the plane 
+(0 <= Xi <= 1,000,000; 0 <= Yi <= 1,000,000). 
+Given the preexisting M roads (1 <= M <= 1,000) as pairs of connected 
+farms, help Farmer John determine the smallest length of additional 
+roads he must build to connect all his farms.
+
+PROBLEM NAME: roads
+
+INPUT FORMAT:
+
+* Line 1: Two space-separated integers: N and M
+
+* Lines 2..N+1: Two space-separated integers: Xi and Yi
+
+* Lines N+2..N+M+2: Two space-separated integers: i and j, indicating 
+	that there is already a road connecting the farm i and farm j.
+
+SAMPLE INPUT:
+
+4 1
+1 1
+3 1
+2 3
+4 3
+1 4
+
+OUTPUT FORMAT:
+
+* Line 1: Smallest length of additional roads required to connect 
+	all farms, printed without rounding to two decimal places. 
+	Be sure to calculate distances as 64-bit floating point numbers.
+
+
+SAMPLE OUTPUT:
+
+4.00

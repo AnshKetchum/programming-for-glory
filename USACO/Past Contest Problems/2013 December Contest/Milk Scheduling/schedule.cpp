@@ -3,18 +3,9 @@ using namespace std;
 #define MAXN 15000
 #define MAXD 15000
 
-typedef pair<int,int> pii;
 priority_queue <int> best;
 multiset <int> optimal_list [MAXN];
 int n,ans;
-
-bool comp(pii a, pii b)
-{
-    if(a.second != b.second)
-        return a.second < b.second;
-    return a.first > b.first;
-}
-
 int main()
 {
     ios_base::sync_with_stdio(false);

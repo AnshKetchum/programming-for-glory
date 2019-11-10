@@ -1,0 +1,37 @@
+String Edit Distance
+====================
+
+Given two strings s1 and s2 (0 < |s1|,|s2| <= 1000) find the minimum 
+number of steps to convert s1 to s2. Valid operations are insert, 
+delete or replace a character. Strings can only be composed of 
+lowercase and uppercase letters.
+
+PROBLEM NAME: sed
+
+INPUT FORMAT:
+
+* Line 1: s1
+
+* Line 2: s2
+
+SAMPLE INPUT:
+
+SUNDAY
+SATURDAY
+
+OUTPUT FORMAT:
+
+* Line 1: Single integer that is the minimum number of steps to
+convert s1 to s2.
+
+SAMPLE OUTPUT:
+
+3
+
+OUTPUT DETAILS:
+
+The conversion steps is as follows:
+0) SUNDAY
+1) SAUNDAY	insert: A
+2) SATUNDAY	insert: T
+3) SATURDAY	replace: N => R

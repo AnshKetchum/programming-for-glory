@@ -1,8 +1,4 @@
-/*****
-ID: ansh1221
-LANG: C++
-PROG: msquare
-**/
+
 #include <bits/stdc++.h>
 using namespace std;
 #define MAX_NUMS 8
