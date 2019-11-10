@@ -6,6 +6,7 @@
         "stack": "cpp",
         "random": "cpp",
         "utility": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "iosfwd": "cpp"
     }
 }

@@ -1,4 +1,12 @@
+<<<<<<< HEAD
+/*****
+ID: INSERT_NAME_HERE
+LANG: C++
+PROG: fact4
+**/
+=======
 
+>>>>>>> master
 #include <bits/stdc++.h>
 using namespace std;
 #define MAXN 10000
