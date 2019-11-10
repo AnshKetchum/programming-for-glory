@@ -47,10 +47,10 @@ int main()
         {
             for(int j = 0; j < 5; j++)
             {
-                for (pii wedge : wheel_list[j].wheels)
+                for (pii x : wheel_list[j].wheels)
                 {
-                    int start = (wedge.first + wheel_list[j].speed * i ) % 360;
-                    if (k >= start && k - start <= wedge.second || k + 360 - start <= wedge.second) 
+                    int start = (x.first + wheel_list[j].speed * i ) % 360;
+                    if ( (k >= start && k - start <= x.second) || (k + 360 - start <= x.second)) 
                     {
                         dp[k]++;
                         break;
