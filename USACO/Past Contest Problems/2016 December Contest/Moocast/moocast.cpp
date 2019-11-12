@@ -6,11 +6,9 @@ using namespace std;
 typedef long long ll;
 typedef pair<int,int> pii;
 
-
 int n,cnt;
 pii coords [MAXN];
 bool visited[MAXN];
-
 int get_squared_dist(int i, int j)
 {
     pii c1 = coords[i], c2 = coords[j];
