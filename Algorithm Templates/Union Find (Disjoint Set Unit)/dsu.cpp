@@ -46,7 +46,7 @@ struct DSU
         return active_groups.size();
     }
 
-    void set_nodes(int cnt)
+    void set_node_count(int cnt)
     {
         n = cnt;
     }
