@@ -9,6 +9,7 @@
         "ostream": "cpp",
         "iosfwd": "cpp",
         "__tree": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "ios": "cpp"
     }
 }
