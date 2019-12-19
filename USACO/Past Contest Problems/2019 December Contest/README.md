@@ -1,4 +1,4 @@
-| Test MD       | Second Header |
+| Solutions       | Difficulty Rating |
 | ------------- | ------------- |
 | Content Cell  | Content Cell  |
 | Content Cell  | Content Cell  |
