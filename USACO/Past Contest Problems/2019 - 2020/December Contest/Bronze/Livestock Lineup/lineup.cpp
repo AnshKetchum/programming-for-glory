@@ -73,8 +73,6 @@ int main()
     {
         if(pos() && possible < ans)
             ans = possible;
-        
-
     }  while(next_permutation(perm, perm + NUM_COWS));
 
     ofstream cout("lineup.out");
