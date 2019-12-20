@@ -1,4 +1,6 @@
-Solutions to contests from the USA Computing Olympiad (a.k.a [USACO](usaco.org) )
+###USACO Past Contest Problems
+
+My Solutions to contests from the USA Computing Olympiad (a.k.a [USACO](usaco.org) )
 
 These problems are found in the 'Past Contests' Section. 
 
