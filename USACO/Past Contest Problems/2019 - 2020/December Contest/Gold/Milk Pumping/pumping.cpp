@@ -59,7 +59,6 @@ int dijkstra()
             }
     } 
 
-
     return (int)(1e6 * cost2[n]);
 } 
 
