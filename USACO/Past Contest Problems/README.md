@@ -4,7 +4,7 @@ My Solutions to contests from the USA Computing Olympiad (a.k.a [USACO](usaco.or
 
 These problems are found in the 'Past Contests' Section. 
 
-Each contest is numbered by date, and all the problems I have attempted / solved are listed belwo
+Each contest is numbered by date, and all the problems I have attempted / solved are listed below
 
 | Season |
 |-------| 
