@@ -14,15 +14,6 @@ ll cost [MAXN],n,m,t,cows[MAXN],cowsOnPath[MAXN],from [MAXN],ans;
 vector <pll> connections [MAXN];
 bool vis[MAXN] = {false};
 
-void printArrs(ll array [], int start, int ending, string name)
-{
-    cout << "Printing: " << name << " ";
-    for(int i = start; i <= ending; i++)
-        cout << array[i] << " ";
-    cout << endl;
-}
-
-
 void dijkstra() //Finding best time for 1 cow
 {
     bool visited [MAXN] = {false};
@@ -59,7 +50,6 @@ void dijkstra() //Finding best time for 1 cow
                     best_edge.push(pll( -c, x.second));
                 }
             }
-        cout << endl;
     }
     
 
@@ -100,9 +90,9 @@ int main()
             j = from[j];
         }
     }
-    
+
     for(int i = 1; i <= n; i++)
         ans = max(ans, cowsOnPath[i] * (cost[i] - t)); 
-    cout << ans << endl;
+    //cout << ans << endl;
     return 0;
 }

@@ -1,62 +1,54 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define MAXN 150000
-#define BESSIE_PIE 0
-#define ELSIE_PIE 1
+#define LL_INF 1e14
+#define INT_INF 1e9
+#define sz(x) int(x.size())
+#define IMPOSSIBLE -1
+#define push_back pb
+#define all(x) (x).begin(), (x).end()
+#define MOD 1e9 + 7
+#define FASTIO 	ios_base::sync_with_stdio(nullptr); cin.tie(nullptr); cout.tie(nullptr);
+#define MAXN 1e5 + 1e4
+typedef long long ll;
+typedef pair<ll,ll> pll;
+typedef vector<pll> vpll;
 
-typedef pair<int,int> pii;
-int n,d;
-pii pies [MAXN],best_choice[MAXN];
-multiset <pii> best_edges[2]; 
-bool visited [MAXN];
-
-void bfs()
+int n,d,dp[2][MAXN];
+pll pie_list [2]; // 0 -> Bessie and 1 -> Elsie
+set<pll> optimal_edge [2];
+int dfs(int cow, int node)
 {
-    queue <pii> enque;
-    for(int i = 1; i <= n; i++)
-    {
-        enque.push(pii(i,BESSIE_PIE));
-        best_edges[BESSIE_PIE].insert(pii(pies[i].second,i));
-    }
-    for(int i = n + 1; i <= 2 * n; i++)
-        best_edges[ELSIE_PIE].insert(pies[i].first,i);
+    if(!pie_list[cow][node])
+        return 0;
+    if(dp[cow][node] != IMPOSSIBLE)
+        return dp[cow][node];
+    
+    pll best_edge = optimal_edge
 
-    while(!enque.empty())
-    {
-        pii top = enque.top();
-        enque.pop();
-
-        if(visited[top.first])
-            continue;
-        visited[top.first] = true;
-
-        switch(top.second)
-        {
-            case BESSIE_PIE:
-            pii best = best_edges[ELSIE_PIE].
-
-            break;
-
-            case ELSIE_PIE:
-
-
-            break;
-        }
-
-    }
-
+    return dp[cow][node] + (dfs(1 - cow, ) != IMPOSSIBLE); 
 }
 
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
-
+    FASTIO
     cin >> n >> d;
-    for(int i = 1; i <= 2 * n; i++)
-        cin >> pies[i].first >> pies[i].second;
 
-    bfs();
+    fill(dp[0], dp[0] + n + 1, IMPOSSIBLE);
+    fill(dp[0], dp[0] + n + 1, IMPOSSIBLE);
 
+    for(int i = 0; i < n; i++)
+    {
+        cin >> pie_list[0].first >> pie_list[0].second;
+        optimal_edge[0].insert(pll(pie_list[0].first,pie_list[0].second))
+    }
+
+    for(int i = 0; i < n; i++)
+    {
+        cin >> pie_list[1].first >> pie_list[1].second;
+        optimal_edge[1].insert(pll(pie_list[1].first,pie_list[1].second))
+    }
+
+    for(int i = 0; i < n; i++)
+        cout << dfs(0,i) << endl;
     return 0;
 }
