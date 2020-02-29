@@ -1,80 +1,74 @@
-/*
-Problem 3: USACO
-*/
 #include <bits/stdc++.h>
 using namespace std;
-#define MAXN 100500
-#define MAXM 27
-#define INF 1e8
-string str;
-int cost[MAXM][MAXM],dp[MAXM][MAXN],pref[MAXM][MAXN],n,m,k,minDP[MAXN];
+#define MAXM 29
+#define MAXN 150000
+#define INF 2e9
 
-int int_value(char c)
+void setIO(string name) //Borrowed from USACO Legend Mr. Benjamin Qi (GitHub user Benq)
 {
-    return c - 'a';
+	ios_base::sync_with_stdio(nullptr); 
+	cin.tie(nullptr); 
+	cout.tie(nullptr);
+	freopen((name+".in").c_str(),"r",stdin);
+	freopen((name+".out").c_str(),"w",stdout);
 }
 
-void floyd_warshall()
+int n,m,k,cost[MAXM][MAXM],pref[MAXN][MAXM],letter[MAXN],minDP[MAXN],dp[MAXN][MAXM];
+
+void floyd_warshall() //Minimum Cost
 {
-    for(int k = 0; k < m; k++)
+    for(int a = 0; a < m; a++)
         for(int i = 0; i < m; i++)
             for(int j = 0; j < m; j++)
-                cost[i][j] = min(cost[i][j] , cost[i][k] + cost[k][j]);
+                cost[i][j] = min(cost[i][j], cost[i][a] + cost[a][j]);
 }
 
-int query(int letter, int from, int to)
+void precalc_sum() //Build Prefix
 {
-    return pref[letter][to + 1] - pref[letter][from];
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < m; j++)
+            pref[i + 1][j] = pref[i][j] + cost[letter[i]][j];
 }
 
-void build_prefix()
+int query(int from, int to, int let) //Cost to convert from letter i to letter j over a range
 {
-    for(int i = 0; i < m; i++)
-        for(int j = 0; j < n; j++)
-            pref[i][j + 1] = pref[i][j] + cost[int_value(str[j])][i];
+    return (pref[to + 1][let] - pref[from][let]);
 }
 
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
+    setIO("cowmbat");
+    cin >> n >> m >> k;
+    for(int i = 0; i < n; i++)
+    {
+        char c; cin >> c;
+        letter[i] = c - 'a';
+    }
 
-    cin >> n >> m >> k >> str;
     for(int i = 0; i < m; i++)
         for(int j = 0; j < m; j++)
             cin >> cost[i][j];
-    
-    fill(minDP, minDP + n + 1, INF);
+
     floyd_warshall();
-    build_prefix();
+    precalc_sum();
 
-    for(int i = 0; i < m; i++) //Debug cost
+    for(int i = 0; i < n; i++)
     {
+        minDP[i] = INF; 
         for(int j = 0; j < m; j++)
-            cout << cost[i][j] << " ";
-        cout << endl;
-    }
-
-    for (int col = k + 1; col < n; col++)
-        for(int row = 0; row < m; row++)
-            dp[row][col] =  query(row, col - k, col);
-
-    for(int i = 0; i < m; i++) //Computing DP states 
-    {
-        int temp1 = INF,temp2 = INF;
-        for(int j = 1; j <= n; j++)
         {
-            if(j >= k)
-                temp1 = (minDP[j - k - 1] + query(i, j - k, j) );
-            temp2 = dp[i][j - 1] + cost[int_value(str[j])][i];
-    
-            cout << temp1 << " " << temp2 << endl; //Printing the values of temp1 / temp2
-            dp[i][j] = min(temp1,temp2);
-            minDP[j] = min(minDP[j], dp[i][j]);
+            int trans1 = INF,trans2 = 0;
+            if(i >= k) //Case = K
+                trans1 = min(trans1, minDP[i - k] + query(i - k + 1, i,j) );
+            if(i > 0)
+                trans2 = dp[i - 1][j];
+            trans2 += cost[letter[i]][j];
+
+            dp[i][j] = min(trans1,trans2);
+            minDP[i] = min(minDP[i], dp[i][j]);
         }
     }
 
-    for(int i = 0; i < n; i++) //Debug: Printing all values of minDP
-        cout << minDP[i] << endl;
+    cout << minDP[n - 1] << endl;
     return 0;
 }
