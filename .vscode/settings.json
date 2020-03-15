@@ -16,5 +16,6 @@
         "deque": "cpp",
         "list": "cpp",
         "string": "cpp"
-    }
+    },
+    "competitive-programming-helper.firstTime": false
 }
