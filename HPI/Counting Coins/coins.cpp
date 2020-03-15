@@ -1,6 +1,4 @@
 #include <bits/stdc++.h>
-#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
-#pragma comment(linker, "/stack:200000000")
 using namespace std;
 
 void setIO() //Borrowed from USACO Legend Mr. Benjamin Qi (Benq)
@@ -11,10 +9,17 @@ void setIO() //Borrowed from USACO Legend Mr. Benjamin Qi (Benq)
 }
 
 
+int n,sum;
 int main()
 {
-	setIO();
+    setIO();
+    cin >> n;
+    for(int i = 0; i < n; i++)  
+    {
+        int a; cin >> a;
+        sum += a;
+    }
 
-
+    cout << sum << endl;
     return 0;
 }
