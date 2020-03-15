@@ -3,7 +3,7 @@ using namespace std;
 #define MAXN 150000
 typedef pair<int,int> pii; //Cost, To -> Node
 
-int n,m,c,dp[MAXN], base[MAXN];
+int n,m,c,dp[MAXN];
 vector < pii> from [MAXN];
 int computeDP(int node)
 {
@@ -11,7 +11,6 @@ int computeDP(int node)
 		return dp[node];
 	for(pii x : from[node])
 		dp[node] = max(dp[node], computeDP(x.second) + x.first);
-	dp[node] = max(base[node],dp[node]);
 	return dp[node];
 }
 
@@ -25,7 +24,7 @@ int main()
 
 	cin >> n >> m >> c;
 	for(int i = 1; i <= n; i++)
-		cin >> base[i];
+		cin >> dp[i];
 	for(int i = 0; i < c; i++)
 	{
 		int a,b,x; cin >> a >> b >> x;
@@ -33,9 +32,6 @@ int main()
 	}
 	
 	for(int i = 1; i <= n; i++)
-	{
-		computeDP(i);
-		cout << dp[i] << endl;
-	}
+		cout << computeDP(i) << endl;
     return 0;
 }
