@@ -16,3 +16,7 @@ Generated\ Files/
 .vscode 
 settings.json
 tempFile.*
+
+#CP Files
+*.cpp.tcs
+*.cpp.bin
