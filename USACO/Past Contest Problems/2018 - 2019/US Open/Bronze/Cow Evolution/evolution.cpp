@@ -1,70 +1,77 @@
 #include <bits/stdc++.h>
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
+#pragma comment(linker, "/stack:200000000")
+#define MAXN 1500
+#define pb push_back 
 using namespace std;
-#define MAXN  25
-#define fnd(x,k) characs[x].find(k) != characs[x].end()
+typedef vector <int> vi;
 
-int n,r;
-set <string> every_charac;
-set <string> characs [MAXN];
-bool possible;
-
-bool is_subset(int i, int j) //Check if characs[i] contains characs[j]
+void setIO(string name) 
 {
-    set <string> a = characs[i];
-    set <string> b = characs[j];
+	ios_base::sync_with_stdio(nullptr); 
+	cin.tie(nullptr); 
+	cout.tie(nullptr);
+	freopen((name+".in").c_str(),"r",stdin);
+	freopen((name+".out").c_str(),"w",stdout);
+}
 
-    for(string t : a)
+
+int n;
+string ans = "yes";
+map <string, int> lookup;
+vi characs, pops[MAXN];
+
+bool bad_sets(int super, int sub)
+{
+    int oa = 0, ob = 0, both = 0;
+    for(int i  = 0; i < n; i++)
     {
-        bool fnd = false;
-        for(string s : b)
-            if(t == s)
-            {
-                fnd = true;
-                break;
-            }
-        if(!fnd)
-            return false;
+        bool a = false, b = false;
+        for(int j = 0; j < pops[i].size(); j++)
+        {
+            if(pops[i][j] == super)
+                a = true;
+            else if(pops[i][j] == sub)
+                b = true;
+        }
+
+        if(a && b)
+            both++;
+        else if(a)
+            oa++;
+        else if(b)
+            ob++;
     }
-}   
-
-bool has_intersect(int i, int j)
-{
-    int ac = 0,bc = 0,intc = 0;
-    for(string k : every_charac)
-    {
-        if(fnd(i,k))
-            ac++;
-        if(fnd(j,k))
-            bc++;
-        if(fnd(i,k) && fnd(j,k))
-            intc++;
-    }   
-    return ac > 0 && bc > 0 && intc > 0;
+    return (oa > 0 && ob > 0 && both > 0);
 }
 
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
+    setIO("evolution");
+    cin >> n;    
 
-    ifstream cin("evolution.in");
-    cin >> n; 
     for(int i = 0; i < n; i++)
     {
-        int a; cin >> a;
-        for(int j = 0; j < a; j++)
+        int k; cin >> k; 
+        pops[i].resize(k);
+        for(int j = 0; j < k; j++)
         {
             string s; cin >> s;
-            characs[i].insert(s);
-            every_charac.insert(s);
+            if(lookup.find(s) == lookup.end())
+            {
+                lookup[s] = lookup.size(); 
+                characs.pb(lookup[s]);
+            }
+            pops[i][j] = lookup[s];
         }
     }
 
-    for(int i = 0; i < n; i++)
-        for(int j = 0; j < n; j++)
-            if(i != j && !is_subset(i,j) && !is_subset(j,i) && has_intersect(i,j))
-                possible = false;
 
-    cout << (possible ? "yes" : "no") << endl;
+    for(int i = 0; i < characs.size() && ans == "yes"; i++)
+        for(int j = i + 1; j < characs.size() && ans == "yes"; j++)
+            if(i != j  && bad_sets(characs[i], characs[j]))
+                ans = "no";
+
+    cout << ans << endl;
     return 0;
 }

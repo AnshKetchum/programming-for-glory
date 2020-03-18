@@ -1,5 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
+#pragma comment(linker, "/stack:200000000")
 #define LL_INF 1e14
 #define INT_INF 1e9
 #define sz(x) int(x.size())
