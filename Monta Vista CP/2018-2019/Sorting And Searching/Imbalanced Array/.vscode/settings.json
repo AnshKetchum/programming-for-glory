@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "ios": "cpp",
+        "utility": "cpp",
+        "stack": "cpp"
+    }
+}
