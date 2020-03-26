@@ -1,35 +1,41 @@
 #include <bits/stdc++.h>
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
+#pragma comment(linker, "/stack:200000000")
+#define MAXN 1000
+#define MAX_DP 1350 // Solution: Binary Search on MAX_DP (a.k.a. keep toggling this value based on submissions - WA = too low, TLE = too high)
 using namespace std;
-#define MAXN 550
-
 typedef pair<int,int> pii;
-int n,w,num,denom;
-pii vals[MAXN];
 
-bool comp( pii a,  pii b)
+void setIO(string name) 
 {
-        double ra = (double)a.second / a.first;
-        double rb = (double)b.second / b.first;
-        return ra > rb;
+    ios_base::sync_with_stdio(false); 
+    cin.tie(nullptr); 
+    cout.tie(nullptr);
+    freopen((name+".in").c_str(),"r",stdin);
+    freopen((name+".out").c_str(),"w",stdout);
 }
+
+int n,dp[MAX_DP],w;
+pii cows[MAXN];
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
-
+    setIO("talent");
     cin >> n >> w;
-    for(int i = 0; i < n; i++)
-        cin >> vals[i].second >> vals[i].first;
+    for(int i = 1; i <= n; i++)
+        cin >> cows[i].first >> cows[i].second;
 
-    sort(vals, vals + n,comp);
+    fill(dp, dp + MAX_DP - 1, -1);
 
-    for(int i = 0; i < n && (denom < num || vals[i].first > vals[i].second ) ; i++)
-    {
-        num += vals[i].first;
-        denom += vals[i].second;
-    }
+    dp[0] = 0;
+    for(int i = 1; i <= n; i++)
+        for(int j = MAX_DP - 1; j >= 0; j--)
+            if(dp[j] != -1 && j + cows[i].first < MAX_DP)
+                dp[j + cows[i].first] = max(dp[j + cows[i].first], dp[j] + cows[i].second);
 
-    int ans = 1000 * ((double)num / denom);
-    cout << ans << endl;
+    double ans = 0.0;
+    for(int i = w; i < MAX_DP; i++)
+        ans = max(ans, dp[i] / (double)i);
+
+    cout << (int)(1000 * ans) << endl;
     return 0;
 }

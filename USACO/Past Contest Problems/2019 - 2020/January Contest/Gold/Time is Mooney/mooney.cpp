@@ -1,141 +1,50 @@
 #include <bits/stdc++.h>
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
+#pragma comment(linker, "/stack:200000000")
 using namespace std;
-#define FASTIO 	ios_base::sync_with_stdio(nullptr); cin.tie(nullptr); cout.tie(nullptr);
-#define MAXN 1500
-#define INF 2e9
+#define MAXN 5500
+#define INF 1e6
+#define BOUND_TIME 1500
+typedef long long ll;
 
-typedef pair<int,int> pii;
-struct Edge
+void setIO(string name) 
 {
-    int edge_count,node, sum;
-
-	Edge(int e, int n, int s)
-	{
-		edge_count = e;
-		node = n;
-		sum = s;
-	}
-
-};
-
-void setIO(string name) //Borrowed from USACO Legend Mr. Benjamin Qi (Benq)
-{
-	FASTIO
-	freopen((name+".in").c_str(),"r",stdin);
-	freopen((name+".out").c_str(),"w",stdout);
-}
-
-int n,m,c,bonus[MAXN],ans;
-vector <int> connections [MAXN];
-vector<Edge> optimal_edges;
-bool visited[MAXN];
-
-void bfs()
-{
-	queue <Edge> enque;
-	enque.push(Edge(0,1,0));
-
-	while(!enque.empty())
-	{
-		Edge top = enque.front();
-		enque.pop();
-
-		visited[top.node] = true;		
-		for(int nn : connections[top.node])
-		{
-			if(nn == 1)
-			{
-				optimal_edges.push_back(Edge(top.edge_count + 1,1,top.sum));
-				continue;
-			}
-
-			else if(!visited[nn])
-				enque.push(Edge(top.edge_count + 1, nn, top.sum + bonus[nn]));
-		}
-	}
-}
-
-int f(int x, int S, int X)
-{
-	int c1 = S * x;
-	int c2 = X * x * x;
-	return c1 - c2;
-}
-
-struct State
-{
-	int node, time, cost;
-
-	State(int n, int t, int c)
-	{
-		node = n;
-		time = t;
-		cost = c;
-	}
-};
-
-int get_cost(int t)
-{
-	return c * t * t;
-}
-
-int bfs2()
-{
-	int ret = 0;
-	queue <State> enque;
-	enque.push(State(1,0,0));
-
-	while(!enque.empty())
-	{
-		State top = enque.front();
-		enque.pop();
-
-		if(top.node == 1)
-			ret = max(ret,top.cost - get_cost(top.time + 1));
-
-			for(int x : connections[top.node])
-				if(top.cost + bonus[x] - get_cost(top.time + 1) >= 0)
-				enque.push(State(x,top.time + 1,top.cost + bonus[x] ));
-
-	}
-	return ret;
-
-}
-
-int solve_equation(Edge optimal)
-{
-	int X = c * (optimal.edge_count * optimal.edge_count);
-	int S = optimal.sum;
-
-	int xmax = (S / (2 * X));
-	int a1 = f(xmax, S,X);
-	int a2 = f(xmax + 1, S, X);
-	return max(a1,a2);
+    ios_base::sync_with_stdio(false); 
+    cin.tie(nullptr); 
+    cout.tie(nullptr);
+    freopen((name+".in").c_str(),"r",stdin);
+    freopen((name+".out").c_str(),"w",stdout);
 }
 
 
-
+ll n,c,M,dp[MAXN][MAXN],m[MAXN],ans;
+vector<int> connections [MAXN];
 int main()
-{	
-	setIO("time");
-	cin >> n >> m >> c;
-	for(int i = 1; i <= n; i++)
-		cin >> bonus[i];
-	for(int i = 0; i < m; i++)
-	{
-		int a,b; cin >> a >> b;
-		connections[a].push_back(b);
-	}
+{
+    setIO("time");
+    cin >> n >> M >> c;
+    for(int i = 1; i <= n; i++)    
+        cin >> m[i];
+    for(int i = 1; i <= M; i++)
+    {
+        int a,b; cin >> a >> b;
+        connections[b].push_back(a);
+    }
 
-/*	bfs();
-	//cout << optimal_edges.size() << endl;
+    for(int i = 0; i <= n; i++)
+        fill(dp[i], dp[i] + BOUND_TIME, -INF);
 
-	for(Edge e : optimal_edges)
-	{
-//		cout << "CYCLE: " << e.sum << " " << e.edge_count << endl;
-		ans = max(ans, solve_equation(e));
-	}
-	cout << ans << endl; */
-	cout << bfs2() << endl;
-    return 0;
+    dp[1][0] = 0;
+    for(int t = 1; t <= BOUND_TIME; t++)
+    {
+        for(int i = 1; i <= n; i++)
+            for(int x  : connections[i])
+                if(dp[x][t - 1] != -INF)
+                    dp[i][t] = max(dp[i][t], dp[x][t - 1] + m[i]);
+    }
+
+    for(int t = 0; t <= BOUND_TIME; t++)
+        ans = max(ans, dp[1][t] - c * t * t);
+    cout << ans << endl;
+    return 0;  
 }

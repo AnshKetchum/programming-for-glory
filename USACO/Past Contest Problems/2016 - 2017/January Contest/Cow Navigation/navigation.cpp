@@ -1,11 +1,9 @@
 #include <bits/stdc++.h>
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
 #pragma comment(linker, "/stack:200000000")
-#define MAXN 50 
-#define INF 1e9
+#define MAXN 25
+#define INF MAXN * MAXN * MAXN * MAXN 
 using namespace std;
-typedef pair<int,int> pii;
-
 
 void setIO(string name) 
 {
@@ -16,48 +14,116 @@ void setIO(string name)
     //freopen((name+".out").c_str(),"w",stdout);
 }
 
-bool visited[MAXN][MAXN];
-int n,dp[MAXN][MAXN][4][MAXN][MAXN][4];
-char grid[MAXN][MAXN];
-int dx [] = {-1,0,1,0};
-int dy [] = {0,1,0,-1};
 
 /*
-Directions:
-1 -> up
-2 -> right
-3 -> down
-4 -> left
+Direction mapping
+Up -> 0
+Right -> 1
+Down -> 2
+Left -> 3
 */
+int n,ans = INF,grid[MAXN][MAXN],dp[MAXN][MAXN][4][MAXN][MAXN][4];
+int dx [] = {0, 1, 0, -1};
+int dy [] = {1, 0, -1, 0};
 
-bool in_bounds(int i, int j, int o)
+struct State
 {
-    return (i >= 1 && j >= 1 && i <= n && j <= n);
+    int x1,y1,x2,y2,o1,o2;
+    State(int a, int b, int c, int d , int e, int f)
+    {
+        x1 = a;
+        y1 = b;
+        o1 = c;
+
+        x2 = a;
+        y2 = b;
+        o2 = c;
+    }
+};
+
+State move_forward(State a)
+{
+    State ret = a;
+    if(!(ret.x1 == n && ret.y1 == n) && ret.x1 - dx[ret.o1] >= 1 && ret.x1 - dx[ret.o1] <= n && ret.y1 - dy[ret.o1] >= 1 && ret.y1 - dy[ret.o1] <= n)
+    {
+        ret.x1 += dx[ret.o1];
+        ret.y1 += dy[ret.o1];
+    }
+    if(!(ret.x2 == n && ret.y2 == n) && ret.x2 - dx[ret.o2] >= 1 && ret.x2 - dx[ret.o2] <= n && ret.y2 - dy[ret.o2] >= 1 && ret.y2 - dy[ret.y2] <= n)
+    {
+        ret.x2 += dx[ret.o2];
+        ret.y2 += dy[ret.o2];
+    }
+    return ret;
 }
 
+State turn(State a, int dir)
+{
+    State ret = a;
+    
+    ret.o1 += dir;
+    if(ret.o1 < 0)
+        ret.o1 += 4;
+    ret.o1 %= 4;
+
+    ret.o2 += dir;
+    if(ret.o2 < 0)
+        ret.o2 += 4;
+    ret.o2 %= 4;
+
+    return ret;
+}
+
+void bfs()
+{
+    queue<State> enque;
 
 
+    //(x1,y1) = right, (x2, y2) = up
+    enque.push(State(1,1,1,1,1,0));
+    dp[1][1][1][1][1][0] = 0;
+    bool flag = false;
+
+    while(!enque.empty())
+    {
+        State top = enque.front();
+        enque.pop();
+
+        if(!flag)
+            flag = true;
+        else if(flag && !dp[top.x1][top.y1][top.o1][top.x2][top.y2][top.o2])
+            dp[top.x1][top.y1][top.o1][top.x2][top.y2][top.o2] = INF;
+
+        if(top.x1 == n && top.y1 == n && top.x2 == n && top.y2 == n)
+            ans = min(ans, dp[top.x1][top.y1][top.o1][top.x2][top.y2][top.o2]);
+
+        //Forward
+        State forward = move_forward(top);
+        dp[forward.x1][forward.y1][forward.o1][forward.x2][forward.y2][forward.o2] = min(dp[forward.x1][forward.y1][forward.o1][forward.x2][forward.y2][forward.o2], 1 + dp[top.x1][top.y1][top.o1][top.x2][top.y2][top.o2] );
+
+        forward = turn(top, 1);
+        dp[forward.x1][forward.y1][forward.o1][forward.x2][forward.y2][forward.o2] = min(dp[forward.x1][forward.y1][forward.o1][forward.x2][forward.y2][forward.o2], 1 + dp[top.x1][top.y1][top.o1][top.x2][top.y2][top.o2] );
+
+
+        forward = turn(top, -1);
+        dp[forward.x1][forward.y1][forward.o1][forward.x2][forward.y2][forward.o2] = min(dp[forward.x1][forward.y1][forward.o1][forward.x2][forward.y2][forward.o2], 1 + dp[top.x1][top.y1][top.o1][top.x2][top.y2][top.o2] );
+    }
+}
 
 int main()
 {
     setIO("cownav");
     cin >> n;
+
+    char c;
     for(int i = n; i > 0; i--)
         for(int j = 1; j <= n; j++)
-            cin >> grid[i][j];
+        {
+            cin >> c;
+            grid[i][j] = (int)(c == 'H');
+        }
 
-    for(int a = 1; a <= n; a++)
-        for(int b = 1; b <= n; b++)
-            for(int c = 0; c < 4; c++)
-                for(int d = 1; d <= n; d++)
-                    for(int e = 1; e <= n; e++) 
-                        for(int f = 0; f < 4; f++)  
-                            dp[a][b][c][d][e][f] = INF;
-
-    //First three indices represent starting up, next three starting right
-    dp[1][1][1][1][1][2] = 0;
     bfs();
-
-
+    cout << ans << endl;
     return 0;
 }

@@ -1,10 +1,11 @@
 #include <bits/stdc++.h>
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
 #pragma comment(linker, "/stack:200000000")
-#define MAXN 150000
+#define INF 2e10
+#define MAXN 250000
 using namespace std;
 typedef long long ll;
-typedef pair<ll,ll> pii;
+typedef pair<int,int> pii;
 
 void setIO(string name) 
 {
@@ -15,36 +16,61 @@ void setIO(string name)
     freopen((name+".out").c_str(),"w",stdout);
 }
 
-ll n,a[MAXN],l[MAXN],r[MAXN];
+int n,ans,tree[MAXN * 5];
+priority_queue <pii> pq;
+
+struct BIT
+{
+    BIT() {}
+    void update(int i)
+    {
+        for(; i <= n; i += (i & -i))
+            tree[i]++;
+    }
+
+    int query(int i)
+    {
+        int ans = 0;
+        for(; i; i -= (i & -i))
+            ans += tree[i];
+        return ans;
+    }
+
+    int range_query(int l, int r)
+    {
+        if(r < l)
+            return 0;
+        return query(r) - query(l - 1);
+    }
+};
+
 int main()
 {
     setIO("bphoto");
     cin >> n;
-    for(int i = 1; i <= n; i++)
-        cin >> a[i];
-
-    multiset<int> ms;
-    l[1] = 0;
-    ms.insert(a[1]);
-    for(int i = 2; i <= n; i++)
+    for(int i = 1, a; i <= n; i++)
     {
-        l[i] = distance(ms.upper_bound(a[i]), ms.end());
-        ms.insert(a[i]);
-    }
-    ms.clear();
-
-    r[n] = 0;
-    ms.insert(a[n]);
-    for(int i = n; i > 0; i--)
-    {
-        r[i] = distance(ms.upper_bound(a[i]), ms.end());
-        ms.insert(a[i]);
+        cin >> a;
+        pq.push(pii(a,i));
     }
 
-    int ret = 0;
-    for(int i = 1; i <= n; i++)
-        if(l[i] > 2 * r[i] || r[i] > 2 * l[i]) 
-            ret++;
-    cout << ret << endl;
+    BIT bit = BIT();
+
+    while(!pq.empty())
+    {
+        pii top = pq.top();
+        pq.pop();
+
+        int leftGreater = bit.range_query(1, top.second - 1);
+        int rightGreater = bit.range_query(top.second + 1, n);
+
+        if(rightGreater > 2 * leftGreater || leftGreater > 2 * rightGreater)
+        {
+            //cout << top.first << " is unbalanced: " << leftGreater << " " << rightGreater << " " << endl;
+            ans++;
+        }
+        bit.update(top.second);
+    }
+    cout << ans << endl; 
     return 0;
 }
